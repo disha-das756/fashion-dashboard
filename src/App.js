@@ -80,7 +80,7 @@ function App() {
     if (currentUser && isAuthOpen) {
       setIsAuthOpen(false);
     }
-  }, [currentUser]);
+  }, [currentUser, isAuthOpen]);
 
   const fetchOrderStats = async () => {
     try {
