@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 
-const API_BASE_URL = "http://localhost:8000";
+import { API_BASE_URL } from "../config";
 
 const FALLBACK_CATEGORIES = [
   { id: 1, name: "Men", slug: "men" },

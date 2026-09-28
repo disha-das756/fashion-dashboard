@@ -14,7 +14,7 @@ import { AuthModal } from "./components/AuthModal";
 import { ProductDetailModal } from "./components/ProductDetailModal";
 import { AddProductModal } from "./components/AddProductModal";
 
-const API_BASE_URL = "http://localhost:8000";
+import { API_BASE_URL } from "./config";
 
 function App() {
   const {

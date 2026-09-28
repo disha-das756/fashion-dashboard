@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API_BASE_URL = "http://localhost:8000";
+import { API_BASE_URL } from "../config";
 
 const parseErrorMessage = (detail, defaultMsg = "Authentication failed.") => {
   if (!detail) return defaultMsg;
