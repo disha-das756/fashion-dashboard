@@ -1,3 +1,4 @@
+import os
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -28,15 +29,16 @@ from schemas import OrderStatus
 
 BASE_DIR = Path(__file__).resolve().parent
 
-DATABASE_PATH = BASE_DIR / "fashion.db"
+# Use DATABASE_URL from environment (for Render PostgreSQL), fallback to SQLite for local dev
+DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{BASE_DIR / 'fashion.db'}")
 
-DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
+# Handle Render's postgres:// URL format (SQLAlchemy needs postgresql://)
+if DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={
-        "check_same_thread": False
-    },
+    connect_args={"check_same_thread": False} if "sqlite" in DATABASE_URL else {},
 )
 
 SessionLocal = sessionmaker(
