@@ -6,7 +6,7 @@ from typing import Optional
 
 from dotenv import load_dotenv
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import bcrypt
 
 from schemas import TokenData
 
@@ -39,12 +39,6 @@ ACCESS_TOKEN_EXPIRE_MINUTES = int(
 # PASSWORD HASHING
 # ============================================================
 
-pwd_context = CryptContext(
-    schemes=["bcrypt"],
-    deprecated="auto",
-)
-
-
 def hash_password(password: str) -> str:
     """
     Hash a user's password using bcrypt.
@@ -59,7 +53,7 @@ def hash_password(password: str) -> str:
             "Password cannot be longer than 72 bytes."
         )
 
-    return pwd_context.hash(password)
+    return bcrypt.hashpw(password_bytes, bcrypt.gensalt()).decode("utf-8")
 
 
 def verify_password(
@@ -76,10 +70,13 @@ def verify_password(
     if len(password_bytes) > 72:
         return False
 
-    return pwd_context.verify(
-        plain_password,
-        hashed_password,
-    )
+    try:
+        return bcrypt.checkpw(
+            password_bytes,
+            hashed_password.encode("utf-8"),
+        )
+    except ValueError:
+        return False
 
 
 # ============================================================
